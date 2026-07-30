@@ -4,9 +4,7 @@ Modulo de gestion del bus RS485 principal (datos) del Nodo Concentrador.
 
 Hardware: dsPIC33EP256MC202 + MAX485 #1 (bidireccional, control de
 direccion por el pin MSRS485). El segundo MAX485 (TX permanente,
-pulso de sincronizacion INT_SINC_1) NO se maneja aqui, ver
-Nodo_Concentrador_Sync.c
-
+pulso de sincronizacion INT_SINC_1) 
 Formato de trama (coincide con lo que ya espera main.c en urx_2 / spi_1):
    [0] 0x3A          -> Byte de inicio de trama
    [1] Direccion     -> Direccion del nodo destino (255 = Broadcast)

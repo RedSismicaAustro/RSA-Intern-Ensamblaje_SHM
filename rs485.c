@@ -15,7 +15,7 @@ Formato de trama (coincide con lo que ya espera main.c en urx_2 / spi_1):
    [4] numDatos MSB  -> Cantidad de bytes del payload (MSB)
    [5..N] Payload    -> Datos asociados a la funcion
 
-Autor: (a completar), basado en el firmware original de Milton Munoz
+
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #ifndef _RS485_C

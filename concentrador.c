@@ -1,18 +1,19 @@
 /*-------------------------------------------------------------------------------------------------------------------------
-Nodo Concentrador - Sistema Distribuido de Monitorizacion de Salud Estructural
-Configuracion: dsPIC33EP256MC202, XT=80MHz
+Nodo Concentrador - Sistema de Monitorizacion de Salud Estructural
+Autor: David Timbi
 
-Alcance de este archivo (12h):
-  - Firmware del dsPIC del Concentrador.
-  - Timer + interrupcion para generar y emitir periodicamente el pulso de
-    sincronizacion (INT_SINC_1) hacia el segundo MAX485 (dedicado, TX permanente).
-  - Gestion de trama de comando y recepcion de datos por el bus RS485 principal
-    (MAX485 #1, bidireccional, ver RS485.c).
+Descripcion:
+  Firmware principal del concentrador, genera el pulso de sincronizacion
+  INT_SINC_1 y maneja el intercambio de mensajes por el bus RS485.
+
+Hardware:
+  dsPIC33EP256MC202, XT=80MHz, MAX485 #1 (bidireccional) y MAX485 #2
+  (solo transmisor para sincronizacion).
 
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 
-////////////////////////////////////////////////////         Definicion de pines         /////////////////////////////////////////////////
+////////////////////////////////////////////////////         Pines         /////////////////////////////////////////////////
 
 
 sbit RP1 at LATA4_bit;                                                          //Pulso de interrupcion hacia la RPi
@@ -36,39 +37,39 @@ sbit INT_SINC_Direction at TRISA1_bit;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////// Declaracion de variables y constantes ///////////////////////////////////////////////////////
+//////////////////////////////////////////////  Variables globales  /////////////////////////////////////////////////////////////
 
-//Subindices:
+// Indices generales
 unsigned int i, j, x;
 
-//Periodo del pulso de sincronizacion:
-#define PERIODO_SYNC_MS      1000                                              //1 pulso por segundo
-#define ANCHO_PULSO_SYNC_US  1000                                              //Ancho del pulso INT_SINC_1 (1 ms), verificar vs. tiempo de propagacion del Daisy Chain
+// Periodo de sincronizacion
+#define PERIODO_SYNC_MS      1000                                              // Intervalo de sync en ms
+#define ANCHO_PULSO_SYNC_US  1000                                              // Duracion del pulso INT_SINC_1 en us
 
-//Variables para comunicacion SPI (interfaz con la RPi):
+// SPI / RPi
 unsigned short banLec, banEsc;
 unsigned char *ptrnumBytesSPI;
-unsigned char tramaSolicitudSPI[10];                                            //Datos de solicitud que envia la RPi por SPI
-unsigned char tramaSolicitudNodo[10];                                           //Datos de solicitud a reenviar a los nodos
+unsigned char tramaSolicitudSPI[10];                                            // Solicitud desde la RPi
+unsigned char tramaSolicitudNodo[10];                                           // Solicitud para el nodo RS485
 unsigned short banInicio;
 unsigned short banRespuestaPi;
 unsigned short banSPI0, banSPI1, banSPI2, banSPI7, banSPI8, banSPIA;
 unsigned short bufferSPI;
 
-//Variables para el manejo del RS485:
-unsigned short banRSI, banRSC;                                                  //Banderas de control de inicio/trama completa
+// RS485
+unsigned short banRSI, banRSC;                                                  // Estado de recepcion RS485
 unsigned char byteRS485;
 unsigned int i_rs485;
-unsigned char tramaCabeceraRS485[10];                                           //[0x3A, Direccion, Funcion, numDatos LSB, numDatos MSB]
-unsigned char inputPyloadRS485[2600];                                           //Payload recibido desde el nodo
-unsigned char outputPyloadRS485[15];                                           //Payload a enviar al nodo
-unsigned short direccionRS485;                                                  //Direccion del nodo. Broadcast = 255
+unsigned char tramaCabeceraRS485[10];                                           // [0x3A, Direccion, Funcion, numDatos LSB, numDatos MSB]
+unsigned char inputPyloadRS485[2600];                                           // Payload recibido desde el nodo
+unsigned char outputPyloadRS485[15];                                           // Payload a enviar al nodo
+unsigned short direccionRS485;                                                  // Direccion del nodo destino (255 = broadcast)
 unsigned short funcionRS485;
 unsigned short subFuncionRS485;
 unsigned int numDatosRS485;
 unsigned char *ptrnumDatosRS485;
 
-//Variables para el control del muestreo:
+// Muestreo
 unsigned short banInicioMuestreo;
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +127,7 @@ void main() {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-//////////////////////////////////////////////////////////////// Funciones ////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////  FUNCIONES  ////////////////////////////////////////////////////////////////
 
 //*****************************************************************************************************************************************
 // Funcion para realizar la configuracion principal
@@ -174,11 +175,11 @@ void ConfiguracionPrincipal(){
      //Configuracion del TMR3: generador del pulso de sincronizacion INT_SINC_1
      //IMPORTANTE: verificar el registro IPC/bit exacto de T3 contra el mapa de vectores
      //de interrupcion del dsPIC33EP256MC202 (family reference manual) antes de programar.
-     T3CON = 0x30;                                                              //Prescalador 1:64 (mismo criterio que TMR1/TMR2 originales)
+     T3CON = 0x30;                                                              //Prescalador 1:256 (mismo criterio que TMR1/TMR2 originales)
      T3CON.TON = 0;                                                             //Se enciende en main() una vez lista la configuracion
      T3IE_bit = 1;
      T3IF_bit = 0;
-     PR3 = 46875;                                                               //Preload equivalente a 300ms base; contadorSync lo multiplica hasta PERIODO_SYNC_MS
+     PR3 = 15625;                                                               //Preload equivalente a 100ms base; contadorSync lo multiplica hasta PERIODO_SYNC_MS
      IPC2bits.T3IP = 0x02;
 
      //Habilitacion de interrupciones
@@ -232,7 +233,7 @@ void CambiarEstadoBandera(unsigned short bandera, unsigned short estado){
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-////////////////////////////////////////////////////////////// Interrupciones /////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////  INTERRUPCIONES  /////////////////////////////////////////////////////////////
 
 //*****************************************************************************************************************************************
 //Interrupcion SPI1 - Comandos desde la RPi hacia el bus RS485
@@ -299,6 +300,8 @@ void spi_1() org  IVT_ADDR_SPI1INTERRUPT {
         direccionRS485 = tramaSolicitudSPI[i];
         outputPyloadRS485[0] = 0xD2;
         EnviarTramaRS485(RS485_PUERTO_UART2, direccionRS485, 0xF1, 1, outputPyloadRS485);
+        T2CON.TON = 1;                                                             //Inicia el Timeout 2 (espera de respuesta del nodo)
+        TMR2 = 0;
         banRespuestaPi = 1;
         CambiarEstadoBandera(7,0);
      }
@@ -337,8 +340,10 @@ void spi_1() org  IVT_ADDR_SPI1INTERRUPT {
         i_rs485 = 0;
         banRespuestaPi = 1;
         EnviarTramaRS485(RS485_PUERTO_UART2, direccionRS485, funcionRS485, numDatosRS485, outputPyloadRS485);
-        T2CON.TON = 1;                                                         //Inicia el Timeout 2 (espera de respuesta del nodo)
-        TMR2 = 0;
+        if (direccionRS485 != RS485_DIR_BROADCAST) {
+            T2CON.TON = 1;                                                         //Inicia el Timeout 2 solo para respuestas individuales
+            TMR2 = 0;
+        }
      }
 
      //Entrega del payload recibido por RS485 hacia la RPi (C:0xAA   F:0xFA)
@@ -368,7 +373,7 @@ void Timer3Int() org IVT_ADDR_T3INTERRUPT{
      T3IF_bit = 0;
      contadorSync++;
 
-     if (contadorSync >= (PERIODO_SYNC_MS/300)){                               //300ms por overflow, ajustar si PR3 cambia
+     if (contadorSync >= (PERIODO_SYNC_MS/100)){                               //100ms por overflow, ajustar si PR3 cambia
         contadorSync = 0;
 
         INT_SINC = ~INT_SINC;                                                  //Testigo de depuracion (opcional)
@@ -438,9 +443,9 @@ void urx_2() org  IVT_ADDR_U2RXINTERRUPT {
         i_rs485++;
      }
      if ((banRSI==1)&&(i_rs485==5)){
-        T2CON.TON = 0;                                                          //Detiene el Timeout 2
-        TMR2 = 0;
         if (tramaCabeceraRS485[1]==direccionRS485){
+           T2CON.TON = 0;                                                          //Detiene el Timeout 2
+           TMR2 = 0;
            funcionRS485 = tramaCabeceraRS485[2];
            *(ptrnumDatosRS485)   = tramaCabeceraRS485[3];                       //LSB numDatosRS485
            *(ptrnumDatosRS485+1) = tramaCabeceraRS485[4];                       //MSB numDatosRS485

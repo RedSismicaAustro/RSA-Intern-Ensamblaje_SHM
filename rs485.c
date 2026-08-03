@@ -1,27 +1,23 @@
 /*-------------------------------------------------------------------------------------------------------------------------
 RS485.c
-Modulo de gestion del bus RS485 principal (datos) del Nodo Concentrador.
+Autor: David Timbi
 
-Hardware: dsPIC33EP256MC202 + MAX485 #1 (bidireccional, control de
-direccion por el pin MSRS485). El segundo MAX485 (TX permanente,
-pulso de sincronizacion INT_SINC_1) NO se maneja aqui, ver
-Nodo_Concentrador_Sync.c
+Modulo compartido para el bus RS485 principal de datos.
+Gestiona la transmision de tramas y el control de direccion del MAX485.
 
-Formato de trama (coincide con lo que ya espera main.c en urx_2 / spi_1):
-   [0] 0x3A          -> Byte de inicio de trama
-   [1] Direccion     -> Direccion del nodo destino (255 = Broadcast)
-   [2] Funcion       -> Codigo de funcion solicitada (0xF1, 0xF2, 0xF3...)
-   [3] numDatos LSB  -> Cantidad de bytes del payload (LSB)
-   [4] numDatos MSB  -> Cantidad de bytes del payload (MSB)
-   [5..N] Payload    -> Datos asociados a la funcion
-
-Autor: (a completar), basado en el firmware original de Milton Munoz
+Formato de trama:
+   [0] 0x3A          Inicio de trama
+   [1] Direccion     Nodo destino (255 = broadcast)
+   [2] Funcion       Codigo de comando
+   [3] numDatos LSB  Longitud del payload (LSB)
+   [4] numDatos MSB  Longitud del payload (MSB)
+   [5..N] Payload    Datos de la funcion
 ---------------------------------------------------------------------------------------------------------------------------*/
 
 #ifndef _RS485_C
 #define _RS485_C
 
-//////////////////////////////////////////////////////////////  Constantes  //////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////  CONSTANTES  //////////////////////////////////////////////////////////////
 
 #define RS485_BYTE_INICIO     0x3A
 #define RS485_PUERTO_UART1    1
@@ -35,8 +31,9 @@ unsigned char tramaPruebaRS485[10] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
 
 
 //*****************************************************************************************************************************************
-// Espera a que el ultimo bit haya salido fisicamente por la linea (registro de corrimiento vacio)
-// antes de soltar el bus, evitando cortar la trama al conmutar el MAX485 a recepcion.
+// RS485_EsperarFinTx
+// Espera a que el ultimo bit haya salido fisicamente por la linea antes de
+// liberar el MAX485 para recepcion.
 static void RS485_EsperarFinTx(unsigned short puerto){
 
      if (puerto==RS485_PUERTO_UART1){

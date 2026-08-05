@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------------------------------------------------------
-Nodo Concentrador - Sistema de Monitorizacion de Salud Estructural
+Nodo Concentrador - Sistema de Monitorizacion de Salud Estructural V1.5
 Autor: David Timbi
 
 Descripcion:

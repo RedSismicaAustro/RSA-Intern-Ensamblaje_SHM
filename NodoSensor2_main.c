@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------------------------------------------------------
-Nodo Sensor B - Sistema de Monitorizacion de Salud Estructural
+Nodo Sensor B - Sistema de Monitorizacion de Salud Estructural V1.5
 Autor: David Timbi
 
 Descripcion:

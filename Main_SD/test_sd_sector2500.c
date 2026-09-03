@@ -29,7 +29,8 @@ unsigned int indice;
 
 void ConfigurarPinesYSPI();
 void PrepararBuffer();
-void Parpadear(unsigned char veces, unsigned int encendido_ms);
+void ParpadearUnSegundo(unsigned char veces);
+void Parpadear250ms(unsigned char veces);
 void ErrorInicializacion();
 void ErrorEscritura();
 
@@ -57,7 +58,7 @@ void main() {
         resultado = SD_Write_Block(bufferSD, SECTOR_PRUEBA);
         if (resultado == DATA_ACCEPTED) {
             sdflags.saving = true;
-            Parpadear(1, 1000);
+            ParpadearUnSegundo(1);
             while (1) {
                 asm CLRWDT;
                 TEST = 1;
@@ -113,13 +114,23 @@ void PrepararBuffer() {
     }
 }
 
-void Parpadear(unsigned char veces, unsigned int encendido_ms) {
+void ParpadearUnSegundo(unsigned char veces) {
     unsigned char repeticion;
     for (repeticion = 0; repeticion < veces; repeticion++) {
         TEST = 1;
-        Delay_ms(encendido_ms);
+        Delay_ms(1000);
         TEST = 0;
-        Delay_ms(encendido_ms);
+        Delay_ms(1000);
+    }
+}
+
+void Parpadear250ms(unsigned char veces) {
+    unsigned char repeticion;
+    for (repeticion = 0; repeticion < veces; repeticion++) {
+        TEST = 1;
+        Delay_ms(250);
+        TEST = 0;
+        Delay_ms(250);
     }
 }
 
@@ -136,7 +147,7 @@ void ErrorInicializacion() {
 void ErrorEscritura() {
     // Dos parpadeos repetidos indican que fallo la escritura del sector 2500.
     while (1) {
-        Parpadear(2, 250);
+        Parpadear250ms(2);
         Delay_ms(2000);
     }
 }

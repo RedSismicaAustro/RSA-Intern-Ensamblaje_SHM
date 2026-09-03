@@ -1,0 +1,33 @@
+main
+	SPI1_Init_Advanced
+	sd_init
+		spi_cs_high
+		spi_xchg
+			SPI1_Read
+		spi_cs_low
+		sd_cmd
+			spi_cs_high
+			spi_xchg
+			spi_cs_low
+	Led3PulsoRapido
+	sd_log_append
+		sd_read_sector
+			spi_cs_low
+			sd_cmd
+			spi_cs_high
+			spi_xchg
+		my_strlen
+		sd_write_sector
+			spi_cs_low
+			sd_cmd
+			spi_cs_high
+			spi_xchg
+	sd_read_sector
+	sd_write_sector
+	my_u32_to_str
+		_Modulus_32x32
+		_Divide_32x32
+	my_strcpy
+	my_strcat
+		my_strcpy
+int_1

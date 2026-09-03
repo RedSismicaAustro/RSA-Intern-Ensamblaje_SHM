@@ -1,0 +1,22 @@
+main
+	ConfiguracionPrincipal
+		UART2_Init_Advanced
+			Get_Fosc_kHz
+			Get_Fosc_Per_Cyc
+			Delay_100ms
+			_Multiply_32x32
+			_Modulus_32x32
+			_Divide_32x32
+		SPI1_Init_Advanced
+urx_2
+	InterrupcionP1
+spi_1
+	CambiarEstadoBandera
+	EnviarTramaRS485
+		RS485_EscribirByte
+			UART1_Write
+			UART2_Write
+		RS485_EsperarFinTx
+Timer3Int
+Timer2Int
+	InterrupcionP1

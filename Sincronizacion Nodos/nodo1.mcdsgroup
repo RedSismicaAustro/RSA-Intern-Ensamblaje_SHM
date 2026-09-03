@@ -1,0 +1,6 @@
+[PROJECTS]
+Count=2
+Project0=Concentrador.mcpds
+Project1=nodo1.mcpds
+[ActiveProject]
+Index=0

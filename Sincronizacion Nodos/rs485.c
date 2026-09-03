@@ -24,7 +24,7 @@ Formato de trama:
 #define RS485_PUERTO_UART2    2
 #define RS485_DIR_BROADCAST   255
 
-//Trama fija de prueba, usada unicamente por EnviarTramaPruebaRS485() para validar el enlace fisico:
+// Trama fija de prueba, usada por EnviarTramaPruebaRS485() para validar el enlace fisico.
 unsigned char tramaPruebaRS485[10] = {10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ static void RS485_EsperarFinTx(unsigned short puerto){
 
 
 //*****************************************************************************************************************************************
-// Escribe un byte por el UART indicado (1 o 2)
+// Escribe un byte mediante el UART indicado (1 o 2).
 static void RS485_EscribirByte(unsigned short puerto, unsigned char dato){
 
      if (puerto==RS485_PUERTO_UART1){
@@ -62,8 +62,8 @@ static void RS485_EscribirByte(unsigned short puerto, unsigned char dato){
 
 //*****************************************************************************************************************************************
 // EnviarTramaRS485
-// Arma y transmite una trama de comando por el bus RS485 principal (datos), controlando
-// el MAX485 #1 (bidireccional) mediante el pin MSRS485 (0=Recepcion, 1=Transmision).
+// Arma y transmite una trama de comando por el bus RS485 principal, controlando
+// el MAX485 #1 mediante MSRS485 (0 = recepcion, 1 = transmision).
 //
 //   puerto    : UART fisico a usar (RS485_PUERTO_UART1 o RS485_PUERTO_UART2)
 //   direccion : direccion del nodo destino (RS485_DIR_BROADCAST = todos los nodos)
@@ -78,22 +78,22 @@ void EnviarTramaRS485(unsigned short puerto, unsigned short direccion, unsigned 
 
      ptrNumDatos = (unsigned char *) &numDatos;
 
-     MSRS485 = 1;                                    // Habilita el MAX485 de datos en modo transmision (DE/RE = 1)
-     Delay_us(10);                                    // Tiempo de establecimiento del transceptor (margen sobre datasheet MAX485)
+   MSRS485 = 1;                                    // Habilita la transmision del MAX485 (DE/RE = 1).
+   Delay_us(10);                                    // Tiempo de establecimiento del transceptor.
 
-     RS485_EscribirByte(puerto, RS485_BYTE_INICIO);   // [0] Cabecera
-     RS485_EscribirByte(puerto, direccion);           // [1] Direccion del nodo destino
-     RS485_EscribirByte(puerto, funcion);             // [2] Funcion solicitada
-     RS485_EscribirByte(puerto, *(ptrNumDatos));      // [3] numDatos LSB
-     RS485_EscribirByte(puerto, *(ptrNumDatos+1));    // [4] numDatos MSB
+   RS485_EscribirByte(puerto, RS485_BYTE_INICIO);   // [0] Cabecera.
+   RS485_EscribirByte(puerto, direccion);           // [1] Direccion del nodo destino.
+   RS485_EscribirByte(puerto, funcion);             // [2] Funcion solicitada.
+   RS485_EscribirByte(puerto, *(ptrNumDatos));      // [3] numDatos LSB.
+   RS485_EscribirByte(puerto, *(ptrNumDatos+1));    // [4] numDatos MSB.
 
      for (k=0; k<numDatos; k++){
-         RS485_EscribirByte(puerto, payload[k]);      // [5..N] Payload
+         RS485_EscribirByte(puerto, payload[k]);      // [5..N] Payload.
      }
 
-     RS485_EsperarFinTx(puerto);                      // Espera a que el ultimo byte salga fisicamente por la linea
+   RS485_EsperarFinTx(puerto);                      // Espera a que el ultimo byte salga por la linea.
      Delay_us(10);
-     MSRS485 = 0;                                     // Regresa el MAX485 a modo recepcion para escuchar la respuesta del nodo
+   MSRS485 = 0;                                     // Devuelve el MAX485 al modo recepcion.
 
 }
 //*****************************************************************************************************************************************
@@ -101,7 +101,7 @@ void EnviarTramaRS485(unsigned short puerto, unsigned short direccion, unsigned 
 
 //*****************************************************************************************************************************************
 // EnviarTramaPruebaRS485
-// Variante de utilidad para probar el enlace fisico con un nodo (funcion 0xF3 en tu protocolo),
+// Variante para probar el enlace fisico con un nodo (funcion 0xF3),
 // reutiliza EnviarTramaRS485 con un payload fijo de prueba.
 //*****************************************************************************************************************************************
 void EnviarTramaPruebaRS485(unsigned short direccion){

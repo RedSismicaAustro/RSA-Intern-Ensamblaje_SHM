@@ -1,0 +1,10 @@
+0	1	mikroCdsPIC.exe -MSF -DBG -pP33EP256MC202 -C -Y -DL -O1111110-1 -fo80 -N"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Examples\nodo1.mcpds" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Uses\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Examples\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Packages\FAT32 Library\Uses\" -SP"C:\Users\Lenovo\OneDrive\Escritorio\Importante\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Uses\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Examples\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Packages\FAT32 Library\Uses\" "nodo1.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays_ep.mcl" "__Lib_SPI_12.mcl" "__Lib_UART_12_p24_p33.mcl" "__Lib_PPS_33EP64MC202.mcl" "__Lib_Mmc.mcl" "__Lib_FAT32_Driver_EP.mcl" "__Lib_FAT32_Defs_EP.mcl" "__Lib_FAT32_EP.mcl"	 
+diagnostics: 0	121	Loading...	 
+diagnostics: 0	122	Compilation Started	nodo1.c
+error: 78	324	Undeclared identifier 'RPINR20bits' in expression	nodo1.c
+error: 78	317	Operator '.' is not applicable to these operands ''	nodo1.c
+error: 79	324	Undeclared identifier 'RPOR19bits' in expression	nodo1.c
+error: 79	317	Operator '.' is not applicable to these operands ''	nodo1.c
+error: 80	324	Undeclared identifier 'RPOR20bits' in expression	nodo1.c
+error: 80	317	Operator '.' is not applicable to these operands ''	nodo1.c
+error: 0	102	Finished (with errors): 31 ago 2026, 16:41:07	nodo1.mcpds

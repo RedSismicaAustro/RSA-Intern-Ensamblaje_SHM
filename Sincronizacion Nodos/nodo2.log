@@ -1,0 +1,15 @@
+0	1	mikroCdsPIC.exe -MSF -DBG -pP33EP256MC202 -DL -SSA -O11111114 -fo80 -N"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Examples\nodo2.mcpds" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Uses\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Examples\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Uses\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Examples\" "nodo2.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays_ep.mcl" "__Lib_SPI_12.mcl" "__Lib_UART_12_p24_p33.mcl"	 
+diagnostics: 0	121	Loading...	 
+diagnostics: 0	122	Compilation Started	nodo2.c
+hint: 0	1004	interrupt handler (int_1 at 0x003C)	nodo2.c
+hint: 0	1004	interrupt handler (Timer2Int at 0x0022)	nodo2.c
+hint: 0	1004	interrupt handler (urx_1 at 0x002A)	nodo2.c
+diagnostics: 238	123	Compiled Successfully	nodo2.c
+diagnostics: 0	127	All files Compiled in 594 ms	 
+hint: 0	1144	Used RX (bytes): 32 (100%)   Free RX (bytes): 0 (0%)	Used RX (bytes): 32 (100%)   Free RX (bytes): 0 (0%)
+hint: 0	1144	Static RAM (bytes): 66   Dynamic RAM (bytes): 28606	Static RAM (bytes): 66   Dynamic RAM (bytes): 28606
+hint: 0	1144	Used ROM (bytes): 2176 (1%)  Free ROM (bytes): 173932 (99%)	Used ROM (bytes): 2176 (1%)  Free ROM (bytes): 173932 (99%)
+diagnostics: 0	125	Project Linked Successfully	nodo2.mcpds
+diagnostics: 0	128	Linked in 640 ms	 
+diagnostics: 0	129	Project 'nodo2.mcpds' completed: 1890 ms	 
+diagnostics: 0	103	Finished successfully: 26 ago 2026, 14:03:03	nodo2.mcpds

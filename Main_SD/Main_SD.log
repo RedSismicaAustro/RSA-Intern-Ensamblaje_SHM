@@ -1,0 +1,20 @@
+0	1	mikroCdsPIC.exe -MSF -DBG -pP33EP256MC202 -DL -SSA -O11111114 -fo80 -N"C:\Users\User\Downloads\Main_SD\Main_SD\Main_SD.mcpds" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Defs\" -SP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Uses\" -SP"C:\Users\User\Downloads\Main_SD\Main_SD\" -IP"C:\Users\Public\Documents\Mikroelektronika\mikroC PRO for dsPIC\Uses\" -IP"C:\Users\User\Downloads\Main_SD\Main_SD\" "Main_SD.c" "sdcard.c" "spiSD.c" "__Lib_Math.mcl" "__Lib_MathDouble.mcl" "__Lib_System.mcl" "__Lib_Delays_ep.mcl" "__Lib_CType.mcl" "__Lib_CString.mcl" "__Lib_CStdlib.mcl" "__Lib_CMath.mcl" "__Lib_Setjmp.mcl" "__Lib_MemManager.mcl" "__Lib_Conversions.mcl" "__Lib_Sprintf.mcl" "__Lib_PrintOut.mcl" "__Lib_Sprinti.mcl" "__Lib_Sprintl.mcl" "__Lib_Time.mcl" "__Lib_Trigonometry.mcl" "__Lib_Button.mcl" "__Lib_Keypad4x4.mcl" "__Lib_Manchester.mcl" "__Lib_OneWire.mcl" "__Lib_PS2.mcl" "__Lib_Sound.mcl" "__Lib_SoftI2C.mcl" "__Lib_SoftSPI.mcl" "__Lib_SoftUART.mcl" "__Lib_ADC_1_EP64_AB.mcl" "__Lib_FLASH_p24_p33EP_20x50x.mcl" "__Lib_I2C_12_p24_p33_9bit.mcl" "__Lib_PWM_P33EPxxxGP50x_MC20x_50x_P24EPxxxGP_MC20x.mcl" "__Lib_SPI_12.mcl" "__Lib_UART_12_p24_p33.mcl" "__Lib_PPS_33EP64MC202.mcl" "__Lib_PortExpander.mcl" "__Lib_CANSPI.mcl" "__Lib_CF.mcl" "__Lib_CFFat16.mcl" "__Lib_GlcdFonts.mcl" "__Lib_Glcd.mcl" "__Lib_LcdConsts.mcl" "__Lib_Lcd.mcl" "__Lib_Mmc.mcl" "__Lib_MmcFat16.mcl" "__Lib_MmcFat16Constants.mcl" "__Lib_RS485.mcl" "__Lib_S1D13700.mcl" "__Lib_T6963C.mcl" "__Lib_SPIGlcd.mcl" "__Lib_SPILcd.mcl" "__Lib_SPILcd8.mcl" "__Lib_SPIT6963C.mcl" "__Lib_EthEnc28j60.mcl" "__Lib_EthEnc24j600.mcl" "__Lib_TFT.mcl" "__Lib_TFT_Defs.mcl" "__Lib_TouchPanel_TFT.mcl" "__Lib_TouchPanel.mcl" "__Lib_BitReverseComplex_EP.mcl" "__Lib_FFT_EP.mcl" "__Lib_FirRadix_EP.mcl" "__Lib_IirRadix_EP.mcl" "__Lib_Matrices.mcl" "__Lib_TwiddleFactors.mcl" "__Lib_Q15_EP.mcl" "__Lib_Vectors.mcl"	 
+diagnostics: 0	121	Loading...	 
+diagnostics: 0	122	Compilation Started	spisd.h
+diagnostics: 416	123	Compiled Successfully	Main_SD.c
+diagnostics: 0	122	Compilation Started	spisd.h
+diagnostics: 515	123	Compiled Successfully	sdcard.c
+hint: 126	1164	Variable 'temp' has been eliminated by optimizer	sdcard.c
+hint: 382	1164	Variable 'temp' has been eliminated by optimizer	sdcard.c
+hint: 396	1164	Variable 'temp' has been eliminated by optimizer	sdcard.c
+hint: 413	1164	Variable 'temp' has been eliminated by optimizer	sdcard.c
+diagnostics: 0	122	Compilation Started	spisd.h
+diagnostics: 46	123	Compiled Successfully	spiSD.c
+diagnostics: 0	127	All files Compiled in 187 ms	 
+hint: 0	1144	Used RX (bytes): 32 (100%)   Free RX (bytes): 0 (0%)	Used RX (bytes): 32 (100%)   Free RX (bytes): 0 (0%)
+hint: 0	1144	Static RAM (bytes): 58   Dynamic RAM (bytes): 28614	Static RAM (bytes): 58   Dynamic RAM (bytes): 28614
+hint: 0	1144	Used ROM (bytes): 3074 (2%)  Free ROM (bytes): 173034 (98%)	Used ROM (bytes): 3074 (2%)  Free ROM (bytes): 173034 (98%)
+diagnostics: 0	125	Project Linked Successfully	Main_SD.mcpds
+diagnostics: 0	128	Linked in 188 ms	 
+diagnostics: 0	129	Project 'Main_SD.mcpds' completed: 547 ms	 
+diagnostics: 0	103	Finished successfully: 02 sept 2026, 17:39:39	Main_SD.mcpds
